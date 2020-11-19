@@ -1,23 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import Navbar from "./components/Navbar";
+import useVisualMode from "./hooks/useVisualMode";
+import Charsheet from "./components/Charsheet";
+import Inventory from "./components/Inventory";
+const CHAR = "CHAR";
 
 function App() {
+  const [message, setMessage] = useState("");
+  const { transition, back, mode } = useVisualMode();
+
+  useEffect(() => {
+    axios.get(`/api/data`).then((response) => {
+      setMessage(response.data.message);
+    });
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Navbar transition={transition} />
+      {mode === "CHAR" && <Charsheet />}
+      {mode === "BAG" && <Inventory />}
     </div>
   );
 }

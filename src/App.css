@@ -1,5 +1,24 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+}
+
+ol,
+ul,
+li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
 .App {
   text-align: center;
+  display: flex;
+  min-height: 100vh;
 }
 
 .App-logo {
@@ -34,5 +53,21 @@
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+@media only screen and (max-width: 960px) {
+  html {
+    font-size: 12px;
+  }
+
+  .layout {
+    flex-direction: column;
+  }
+}
+
+@media only screen and (max-width: 320px) {
+  html {
+    font-size: 10px;
   }
 }
