@@ -1,4 +1,3 @@
-import logo from "./logo.svg";
 import "./App.css";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
@@ -6,11 +5,10 @@ import Navbar from "./components/Navbar";
 import useVisualMode from "./hooks/useVisualMode";
 import Charsheet from "./components/Charsheet";
 import Inventory from "./components/Inventory";
-const CHAR = "CHAR";
 
 function App() {
   const [message, setMessage] = useState("");
-  const { transition, back, mode } = useVisualMode();
+  const { transition, mode } = useVisualMode();
 
   useEffect(() => {
     axios.get(`/api/data`).then((response) => {

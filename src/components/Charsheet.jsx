@@ -1,16 +1,15 @@
 import React from "react";
+import FiveEStat from "./FiveEStat";
 
 export default function Charsheet(props) {
   return (
     <div>
-      <label for="strength">Choose Value:</label>
-
-      <select name="strength" id="strength">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-      </select>
+      <h2>STR</h2> <FiveEStat name={"STR"} />
+      <h2>DEX</h2> <FiveEStat name={"DEX"} />
+      <h2>CON</h2> <FiveEStat name={"CON"} />
+      <h2>INT</h2> <FiveEStat name={"INT"} />
+      <h2>WIS</h2> <FiveEStat name={"WIS"} />
+      <h2>CHR</h2> <FiveEStat name={"CHR"} />
     </div>
   );
 }
