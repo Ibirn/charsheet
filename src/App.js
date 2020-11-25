@@ -1,14 +1,12 @@
 import "./App.css";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Navbar from "./components/Navbar";
-import useVisualMode from "./hooks/useVisualMode";
 import Charsheet from "./components/Charsheet";
-import Inventory from "./components/Inventory";
+import Navbar from "./components/Navbar";
+import { BrowserRouter, Route, Redirect } from "react-router-dom";
 
 function App() {
   const [message, setMessage] = useState("");
-  const { transition, mode } = useVisualMode();
 
   useEffect(() => {
     axios.get(`/api/data`).then((response) => {
@@ -18,9 +16,11 @@ function App() {
 
   return (
     <div className="App">
-      <Navbar transition={transition} />
-      {mode === "CHAR" && <Charsheet />}
-      {mode === "BAG" && <Inventory />}
+      <BrowserRouter>
+        <Navbar />
+        <Route exact path="/" />
+        <Route path="/character" component={Charsheet} />
+      </BrowserRouter>
     </div>
   );
 }

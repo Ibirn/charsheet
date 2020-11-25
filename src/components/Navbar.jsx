@@ -2,18 +2,23 @@ import React from "react";
 import Character from "./Tabs/Character";
 import Bag from "./Tabs/Bag";
 import "../styles/Nav.scss";
+import { Link } from "react-router-dom";
 
 const Navbar = (props) => {
   console.log("NAVPROPS", props);
   return (
     <nav className="navbar">
-      <div className="badge-login-buttons">
-        <button onClick={(e) => console.log("Clicked")} className="log-button">
-          Hello
-        </button>
-        <Character transition={props.transition} />
-        <Bag transition={props.transition} />
-      </div>
+      <ul className="nav-links">
+        <li>
+          <Link to={"/character"}>Character</Link>
+        </li>
+        <li>
+          <Link to={"/inventory"}>Inventory</Link>
+        </li>
+        <li>
+          <Link to={"/other"}>Other</Link>
+        </li>
+      </ul>
     </nav>
   );
 };

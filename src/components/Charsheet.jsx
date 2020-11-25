@@ -1,15 +1,21 @@
-import React from "react";
-import FiveEStat from "./FiveEStat";
+import React, { useEffect, useState } from "react";
+import Character from "./Tabs/Character";
+// import FiveEStat from "./FiveEStat";
+// import useCharacterData from "../hooks/useCharacterData";
+import axios from "axios";
 
 export default function Charsheet(props) {
-  return (
-    <div>
-      <h2>STR</h2> <FiveEStat name={"STR"} />
-      <h2>DEX</h2> <FiveEStat name={"DEX"} />
-      <h2>CON</h2> <FiveEStat name={"CON"} />
-      <h2>INT</h2> <FiveEStat name={"INT"} />
-      <h2>WIS</h2> <FiveEStat name={"WIS"} />
-      <h2>CHR</h2> <FiveEStat name={"CHR"} />
-    </div>
-  );
+  const [sheet, setSheet] = useState({});
+  const [loaded, setLoaded] = useState(false);
+  console.log("CH: ", sheet);
+
+  useEffect(() => {
+    axios.get(`/character`).then((response) => {
+      setSheet(response.data);
+      setLoaded(true);
+    });
+    return () => {};
+  }, [loaded]);
+
+  return <div>{loaded && <Character {...sheet} />}</div>;
 }

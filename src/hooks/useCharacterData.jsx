@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export default function useVisualMode(initMode) {
+export default function useCharacterData(initMode) {
   const [sheet, setSheet] = useState({
     STR: 1,
     DEX: 1,
