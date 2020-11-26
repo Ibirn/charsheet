@@ -7,7 +7,6 @@ import axios from "axios";
 export default function Charsheet(props) {
   const [sheet, setSheet] = useState({});
   const [loaded, setLoaded] = useState(false);
-  console.log("CH: ", sheet);
 
   useEffect(() => {
     axios.get(`/character`).then((response) => {
@@ -17,5 +16,5 @@ export default function Charsheet(props) {
     return () => {};
   }, [loaded]);
 
-  return <div>{loaded && <Character {...sheet} />}</div>;
+  return <div>{loaded && <Character {...sheet} loaded />}</div>;
 }
