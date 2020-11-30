@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useReducer } from "react";
 import axios from "axios";
 import Modifier from "../Modifier";
 
@@ -11,9 +11,27 @@ export default function Character(props) {
     "intelligence",
     "charisma",
   ];
-  let updateArr = [];
-
   const [newSheet, setNewSheet] = useState({ ...props });
+  const [state, dispatch] = useReducer(reducer, { ...props });
+
+  function reducer(state, action) {
+    switch (action.type) {
+      case "changestr":
+        return { ...state, strength: action.strength };
+      case "changedex":
+        return { ...state, dexterity: action.dexterity };
+      case "changecon":
+        return { ...state, constitution: action.constitution };
+      case "changeint":
+        return { ...state, intelligence: action.intelligence };
+      case "changewis":
+        return { ...state, wisdom: action.wisdom };
+      case "changechr":
+        return { ...state, charisma: action.charisma };
+      default:
+        throw new Error();
+    }
+  }
 
   const genNumbers = (stat) => {
     for (let i = 1; i <= 20; i++) {
@@ -28,21 +46,6 @@ export default function Character(props) {
     }
   };
 
-  const updateChar = (stat, value, id) => {
-    axios
-      .put("/character", {
-        stat: stat,
-        value: value,
-        id,
-      })
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
-
   useEffect(() => {
     if (props.loaded) {
       for (const elem of statArr) {
@@ -52,9 +55,8 @@ export default function Character(props) {
   }, [props.loaded]);
 
   const cleanupStats = () => {
-    for (let elem of statArr) {
-      console.log(props[elem], newSheet);
-    }
+    setNewSheet((prev) => ({ ...state }));
+    console.log(newSheet);
   };
 
   //must return as function to call on unmount
@@ -62,70 +64,61 @@ export default function Character(props) {
     return () => {
       console.log("leaving???");
       cleanupStats();
-      console.log(updateArr);
     };
   }, []);
 
-  console.log("INNER: ", newSheet, props);
+  // console.log("INNER: ", newSheet, props);
 
   return (
     <div>
-      <h2>STR</h2>
+      <button onClick={() => cleanupStats()}>sdfsd</button>
+      <h2>STR {state.str}</h2>
       <select
         id="strength"
         selected={props.strength}
-        onChange={(e) =>
-          setNewSheet((prev) => ({ ...prev, strength: Number(e.target.value) }))
-        }
+        onChange={(e) => {
+          dispatch({ type: "changestr", strength: Number(e.target.value) });
+        }}
       ></select>
       <h2>DEX</h2>
       <select
         id="dexterity"
         selected={props.dexterity}
-        onChange={(e) =>
-          setNewSheet((prev) => ({
-            ...prev,
-            dexterity: Number(e.target.value),
-          }))
-        }
+        onChange={(e) => {
+          dispatch({ type: "changedex", dexterity: Number(e.target.value) });
+        }}
       ></select>
       <h2>CON</h2>
       <select
         id="constitution"
         selected={props.constitution}
-        onChange={(e) =>
-          setNewSheet((prev) => ({
-            ...prev,
-            constitution: Number(e.target.value),
-          }))
-        }
+        onChange={(e) => {
+          dispatch({ type: "changecon", constitution: Number(e.target.value) });
+        }}
       ></select>
       <h2>INT</h2>
       <select
         id="intelligence"
         selected={props.intelligence}
-        onChange={(e) =>
-          setNewSheet((prev) => ({
-            ...prev,
-            intelligence: Number(e.target.value),
-          }))
-        }
+        onChange={(e) => {
+          dispatch({ type: "changeint", intelligence: Number(e.target.value) });
+        }}
       ></select>
       <h2>WIS</h2>
       <select
         id="wisdom"
         selected={props.wisdom}
-        onChange={(e) =>
-          setNewSheet((prev) => ({ ...prev, wisdom: Number(e.target.value) }))
-        }
+        onChange={(e) => {
+          dispatch({ type: "changewis", wisdom: Number(e.target.value) });
+        }}
       ></select>
       <h2>CHR</h2>
       <select
         id="charisma"
         selected={props.charisma}
-        onChange={(e) =>
-          setNewSheet((prev) => ({ ...prev, charisma: Number(e.target.value) }))
-        }
+        onChange={(e) => {
+          dispatch({ type: "changechr", charisma: Number(e.target.value) });
+        }}
       ></select>
     </div>
   );
