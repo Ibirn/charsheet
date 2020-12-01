@@ -54,24 +54,25 @@ export default function Character(props) {
     }
   }, [props.loaded]);
 
-  const cleanupStats = () => {
-    setNewSheet((prev) => ({ ...state }));
-    console.log(newSheet);
+  const cleanupStats = (input) => {
+    console.log("in: ", input);
+    setNewSheet(input);
+    console.log("NS: ", newSheet);
+    console.log("ST: ", state);
   };
 
   //must return as function to call on unmount
   useEffect(() => {
     return () => {
-      console.log("leaving???");
-      cleanupStats();
+      axios.put(`/character`, state);
     };
-  }, []);
+  }, [newSheet]);
 
   // console.log("INNER: ", newSheet, props);
 
   return (
     <div>
-      <button onClick={() => cleanupStats()}>sdfsd</button>
+      <button onClick={() => cleanupStats(state)}>sdfsd</button>
       <h2>STR {state.str}</h2>
       <select
         id="strength"
