@@ -10,11 +10,23 @@ export default function Charsheet(props) {
 
   useEffect(() => {
     axios.get(`/character`).then((response) => {
+      console.log(response.data);
       setSheet(response.data);
       setLoaded(true);
     });
     return () => {};
-  }, [loaded]);
+  }, []);
 
-  return <div>{loaded && <Character {...sheet} loaded />}</div>;
+  return (
+    <div>
+      {loaded && (
+        <Character
+          {...sheet}
+          loaded
+          newData={() => setSheet()}
+          unload={() => setLoaded()}
+        />
+      )}
+    </div>
+  );
 }
