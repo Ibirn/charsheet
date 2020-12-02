@@ -65,10 +65,8 @@ export default function Character(props) {
     axios.put(`/character`, state);
   };
 
-  const changeMod = () => {};
-
   return (
-    <div>
+    <div id="char-sheet">
       <div className="portrait">
         <img src={props.avatar} alt="portrait" />
       </div>

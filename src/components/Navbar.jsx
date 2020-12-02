@@ -1,6 +1,4 @@
 import React from "react";
-import Character from "./Tabs/Character";
-import Bag from "./Tabs/Bag";
 import "../styles/Nav.scss";
 import { Link } from "react-router-dom";
 
