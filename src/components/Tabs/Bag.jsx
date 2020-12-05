@@ -1,3 +1,4 @@
+import Axios from "axios";
 import React, { useEffect } from "react";
 import "../../styles/Inventorystyles.scss";
 
@@ -9,35 +10,29 @@ export default function Bag(props) {
   console.log(bagArr);
 
   useEffect(() => {
+    //drag source element is nothing
     let dragSrcEl = null;
 
-    function handleDragStart(e) {
-      this.style.opacity = "0.4";
-
-      dragSrcEl = this;
-
-      e.dataTransfer.effectAllowed = "move";
-      e.dataTransfer.setData("text/html", this.innerHTML);
-    }
-
+    //stop redirect, allow for operation
     function handleDragOver(e) {
       if (e.preventDefault) {
         e.preventDefault();
       }
-
       e.dataTransfer.dropEffect = "move";
-
       return false;
     }
 
+    //adds class for effects on move
     function handleDragEnter(e) {
       this.classList.add("over");
     }
 
+    //removes above
     function handleDragLeave(e) {
       this.classList.remove("over");
     }
 
+    //Whe you start dragging opacity at .4, dragsrc become this element, and memorize the html to move
     function handleDragStart(e) {
       this.style.opacity = "0.4";
 
@@ -47,6 +42,7 @@ export default function Bag(props) {
       e.dataTransfer.setData("text/html", this.innerHTML);
     }
 
+    //return opacity to normal, remove drag class effects
     function handleDragEnd(e) {
       this.style.opacity = "1";
 
@@ -55,6 +51,7 @@ export default function Bag(props) {
       });
     }
 
+    // as long as the the source of the drag is not the same thing it's over, replace the inner html of the things.
     function handleDrop(e) {
       console.log("HD: ", e, dragSrcEl, this);
       if (e.stopPropagation) {
@@ -89,6 +86,10 @@ export default function Bag(props) {
       item.addEventListener("dragend", handleDragEnd, false);
     });
   }, []);
+
+  // useEffect(() => {
+  //   return
+  // }, [])
 
   const bagContents = bagArr.map((item) => {
     return (
