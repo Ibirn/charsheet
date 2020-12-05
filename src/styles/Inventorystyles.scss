@@ -2,6 +2,16 @@
   display: flex;
   padding: 10px;
 }
+
+table,
+th,
+td {
+  border: 1px solid black;
+}
+
 .equip-table {
   border: 1px solid #999;
+  .over {
+    border: 1px dotted #666;
+  }
 }
