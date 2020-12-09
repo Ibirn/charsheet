@@ -1,13 +1,18 @@
 import Axios from "axios";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import Storage from "../Storage";
 import "../../styles/Inventorystyles.scss";
 
 export default function Bag(props) {
-  let bagArr = [];
-  for (let item of props.bag.split(",")) {
-    bagArr.push(item.trim());
-  }
-  console.log(bagArr);
+  const bagInit = () => {
+    let output = [];
+    for (let item of props.bag.split(",")) {
+      output.push(item.trim());
+    }
+    return output;
+  };
+
+  const [invArray, setInvArray] = useState(bagInit());
 
   useEffect(() => {
     //drag source element is nothing
@@ -34,18 +39,17 @@ export default function Bag(props) {
 
     //Whe you start dragging opacity at .4, dragsrc become this element, and memorize the html to move
     function handleDragStart(e) {
+      console.log("This: ", this);
       this.style.opacity = "0.4";
-
       dragSrcEl = this;
-
       e.dataTransfer.effectAllowed = "move";
       e.dataTransfer.setData("text/html", this.innerHTML);
     }
 
     //return opacity to normal, remove drag class effects
     function handleDragEnd(e) {
+      console.log("DE");
       this.style.opacity = "1";
-
       items.forEach(function (item) {
         item.classList.remove("over");
       });
@@ -53,7 +57,6 @@ export default function Bag(props) {
 
     // as long as the the source of the drag is not the same thing it's over, replace the inner html of the things.
     function handleDrop(e) {
-      console.log("HD: ", e, dragSrcEl, this);
       if (e.stopPropagation) {
         e.stopPropagation(); // stops the browser from redirecting.
       }
@@ -67,7 +70,6 @@ export default function Bag(props) {
     }
     let items = document.querySelectorAll(".equipslot");
     items.forEach(function (item) {
-      console.log("D:", item);
       item.addEventListener("dragstart", handleDragStart, false);
       item.addEventListener("dragenter", handleDragEnter, false);
       item.addEventListener("dragover", handleDragOver, false);
@@ -75,31 +77,11 @@ export default function Bag(props) {
       item.addEventListener("drop", handleDrop, false);
       item.addEventListener("dragend", handleDragEnd, false);
     });
-    let storage = document.querySelectorAll(".bagitem");
-    storage.forEach((item) => {
-      console.log("E:", item);
-      item.addEventListener("dragstart", handleDragStart, false);
-      item.addEventListener("dragenter", handleDragEnter, false);
-      item.addEventListener("dragover", handleDragOver, false);
-      item.addEventListener("dragleave", handleDragLeave, false);
-      item.addEventListener("drop", handleDrop, false);
-      item.addEventListener("dragend", handleDragEnd, false);
-    });
-  }, []);
+  }, [invArray]);
 
-  // useEffect(() => {
-  //   return
-  // }, [])
-
-  const bagContents = bagArr.map((item) => {
-    return (
-      <p className={"bagitem"} draggable={true}>
-        {item}
-      </p>
-    );
-  });
-
-  useEffect(() => {}, []);
+  const addToInv = (input) => {
+    setInvArray((prev) => [...prev, input]);
+  };
 
   return (
     <>
@@ -150,8 +132,18 @@ export default function Bag(props) {
       </table>
       <div className="inv-storage">
         <h3>Bag:</h3>
-        {bagContents}
+        <Storage items={invArray} />
         <p>Gold: {props.gold || 0}</p>
+      </div>
+      <div>
+        <input type="text" id="new-item"></input>
+        <button
+          onClick={(e) => {
+            addToInv(document.getElementById("new-item").value);
+          }}
+        >
+          Add item
+        </button>
       </div>
     </>
   );
