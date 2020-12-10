@@ -3,9 +3,11 @@ import "../styles/Inventorystyles.scss";
 import Storage from "./Storage";
 
 export default function Inventory2(props) {
+  //get items from session storage axios call
   let inventory = JSON.parse(sessionStorage.getItem("inventory"));
-  console.log(inventory);
+  const [allItems, setAllItems] = useState({ ...inventory });
 
+  //produce list of items not worn
   let bagOfHolding = () => {
     let output = [];
     for (let item of inventory.bag.split(",")) {
@@ -14,12 +16,19 @@ export default function Inventory2(props) {
     return output;
   };
 
+  //useState to govern items added/swapped
   const [bag, setBag] = useState(bagOfHolding());
 
+  //button onClick
   const addEquip = (input) => {
     setBag((prev) => [...prev, input]);
   };
 
+  const addToBag = () => {
+    return bag.join();
+  };
+
+  //-----------Drag and Drop Stuff-------------
   let dragSource = null;
 
   function handleDragStart(e) {
@@ -38,28 +47,43 @@ export default function Inventory2(props) {
 
   function handleDrop(e) {
     if (dragSource !== this && dragSource !== null) {
+      console.log("DS: ", dragSource.id, "\nTHIS: ", this);
       dragSource.innerHTML = this.innerHTML;
       this.innerHTML = e.dataTransfer.getData("text/html");
+      if (dragSource.id.includes("bag") || this.id.includes("bag")) {
+      }
+      setAllItems((prev) => ({
+        ...prev,
+        [dragSource.id]: document.getElementById(dragSource.id).innerHTML,
+        [this.id]: document.getElementById(this.id).innerHTML,
+      }));
       e.preventDefault();
     }
   }
 
   useEffect(() => {
-    console.log("?");
+    console.log(addToBag());
+    setAllItems((prev) => ({ ...prev, bag: addToBag() }));
+    //grab all items
     let items = document.querySelectorAll(".equip-slot");
-
+    //give each item listeners for drag
     items.forEach((item) => {
       item.addEventListener("dragstart", handleDragStart);
       item.addEventListener("drop", handleDrop);
       item.addEventListener("dragover", handleDragOver);
     });
     return () =>
+      //remove the goddamn listeners to prevent problems, you numpty - 5 hours and you should know better.
       items.forEach((item) => {
         item.removeEventListener("dragstart", handleDragStart);
         item.removeEventListener("drop", handleDrop);
         item.removeEventListener("dragover", handleDragOver);
       });
   }, [bag]);
+
+  useEffect(() => {
+    console.log("??: ", allItems);
+  }, [allItems]);
 
   return (
     <>
@@ -72,37 +96,37 @@ export default function Inventory2(props) {
         <tbody>
           <tr>
             <td>Primary:</td>
-            <td className={"equip-slot"} draggable={true}>
+            <td id="primary_weapon" className={"equip-slot"} draggable={true}>
               {inventory.primary_weapon || "none"}
             </td>
           </tr>
           <tr>
             <td>Secondary:</td>
-            <td className={"equip-slot"} draggable={true}>
+            <td id="secondary_weapon" className={"equip-slot"} draggable={true}>
               {inventory.secondary_weapon || "none"}
             </td>
           </tr>
           <tr>
             <td>Armor:</td>
-            <td className={"equip-slot"} draggable={true}>
+            <td id="armor" className={"equip-slot"} draggable={true}>
               {inventory.armor || "none"}
             </td>
           </tr>
           <tr>
             <td>Attunement 1:</td>
-            <td className={"equip-slot"} draggable={true}>
+            <td id="attunement_1" className={"equip-slot"} draggable={true}>
               {inventory.attunement_1 || "none"}
             </td>
           </tr>
           <tr>
             <td>Attunement 2:</td>
-            <td className={"equip-slot"} draggable={true}>
+            <td id="attunement_2" className={"equip-slot"} draggable={true}>
               {inventory.attunement_2 || "none"}
             </td>
           </tr>
           <tr>
             <td>Attunement 3:</td>
-            <td className={"equip-slot"} draggable={true}>
+            <td id="attunement_3" className={"equip-slot"} draggable={true}>
               {inventory.attunement_3 || "none"}
             </td>
           </tr>

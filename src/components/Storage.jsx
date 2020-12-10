@@ -4,10 +4,14 @@ export default function Storage(props) {
   console.log("ST:", props);
   return (
     <>
-      {props.items.map((item) => {
+      {props.items.map((item, index) => {
         return (
           <tr>
-            <td className={"equip-slot"} draggable={true}>
+            <td
+              id={`bag${index}`}
+              className={"equip-slot baggedItem"}
+              draggable={true}
+            >
               {item}
             </td>
           </tr>

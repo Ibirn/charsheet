@@ -4,9 +4,7 @@ import axios from "axios";
 import Charsheet from "./components/Charsheet";
 import Navbar from "./components/Navbar";
 import { BrowserRouter, Route } from "react-router-dom";
-import Inventory from "./components/Inventory";
 import Inventory2 from "./components/Inventory2";
-import Other from "./components/Tabs/Other";
 
 function App() {
   // const [message, setMessage] = useState("");
