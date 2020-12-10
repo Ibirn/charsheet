@@ -1,4 +1,4 @@
-import Axios from "axios";
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Storage from "../Storage";
 import "../../styles/Inventorystyles.scss";
@@ -13,6 +13,10 @@ export default function Bag(props) {
   };
 
   const [invArray, setInvArray] = useState(bagInit());
+
+  const saveEquip = () => {
+    axios.put(`/inventory`, ["pie"]);
+  };
 
   useEffect(() => {
     //drag source element is nothing
@@ -29,6 +33,7 @@ export default function Bag(props) {
 
     //adds class for effects on move
     function handleDragEnter(e) {
+      console.log(e);
       this.classList.add("over");
     }
 
@@ -48,7 +53,7 @@ export default function Bag(props) {
 
     //return opacity to normal, remove drag class effects
     function handleDragEnd(e) {
-      console.log("DE");
+      console.log("DE", e);
       this.style.opacity = "1";
       items.forEach(function (item) {
         item.classList.remove("over");
@@ -70,6 +75,7 @@ export default function Bag(props) {
     }
     let items = document.querySelectorAll(".equipslot");
     items.forEach(function (item) {
+      console.log("ADD HANDLERS:", item);
       item.addEventListener("dragstart", handleDragStart, false);
       item.addEventListener("dragenter", handleDragEnter, false);
       item.addEventListener("dragover", handleDragOver, false);
@@ -138,8 +144,8 @@ export default function Bag(props) {
       <div>
         <input type="text" id="new-item"></input>
         <button
-          onClick={(e) => {
-            addToInv(document.getElementById("new-item").value);
+          onClick={() => {
+            saveEquip();
           }}
         >
           Add item
