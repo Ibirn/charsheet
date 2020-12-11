@@ -1,10 +1,11 @@
 import "./App.css";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
 import Charsheet from "./components/Charsheet";
 import Navbar from "./components/Navbar";
 import { BrowserRouter, Route } from "react-router-dom";
 import Inventory2 from "./components/Inventory2";
+import Other from "./components/Tabs/Other";
 
 function App() {
   // const [message, setMessage] = useState("");
@@ -27,7 +28,7 @@ function App() {
         <Route exact path="/" />
         <Route exact path="/character" component={Charsheet} />
         <Route exact path="/inventory" component={Inventory2} />
-        <Route exact path="/other" component={Inventory2} />
+        <Route exact path="/other" component={Other} />
       </BrowserRouter>
     </div>
   );

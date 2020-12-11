@@ -4,13 +4,14 @@ import Storage from "./Storage";
 
 export default function Inventory2(props) {
   //get items from session storage axios call
-  let inventory = JSON.parse(sessionStorage.getItem("inventory"));
-  const [allItems, setAllItems] = useState({ ...inventory });
+  const [allItems, setAllItems] = useState({
+    ...JSON.parse(sessionStorage.getItem("inventory")),
+  });
 
   //produce list of items not worn
   let bagOfHolding = () => {
     let output = [];
-    for (let item of inventory.bag.split(",")) {
+    for (let item of allItems.bag.split(",")) {
       output.push(item.trim());
     }
     return output;
@@ -33,7 +34,6 @@ export default function Inventory2(props) {
 
   function handleDragStart(e) {
     dragSource = this;
-    console.log("DRAGST: ", this);
     e.dataTransfer.effectAllowed = "move";
     e.dataTransfer.setData("text/html", this.innerHTML);
   }
@@ -51,10 +51,7 @@ export default function Inventory2(props) {
       dragSource.innerHTML = this.innerHTML;
       this.innerHTML = e.dataTransfer.getData("text/html");
       let temp = [];
-
       if (dragSource.id.includes("bag")) {
-        console.log("DRAGSRC: ", dragSource);
-        // console.log("BAGPROB: ", this);
         for (const item of document.getElementsByClassName("baggedItem")) {
           temp.push(item.innerHTML);
         }
@@ -64,8 +61,6 @@ export default function Inventory2(props) {
           bag: temp.join(),
         }));
       } else if (this.id.includes("bag")) {
-        console.log("THIS: ", dragSource.id, dragSource.innerHTML);
-        console.log(dragSource.innerHTML);
         for (const item of document.getElementsByClassName("baggedItem")) {
           temp.push(item.innerHTML);
         }
@@ -86,7 +81,6 @@ export default function Inventory2(props) {
   }
 
   useEffect(() => {
-    // console.log(addToBag());
     setAllItems((prev) => ({ ...prev, bag: addToBag() }));
     //grab all items
     let items = document.querySelectorAll(".equip-slot");
@@ -106,7 +100,11 @@ export default function Inventory2(props) {
   }, [bag]);
 
   useEffect(() => {
-    console.log("??: ", allItems);
+    sessionStorage.setItem("inventory", JSON.stringify(allItems));
+    sessionStorage.setItem("invAutosave", JSON.stringify(allItems));
+    return () => {
+      // saveInv();
+    };
   }, [allItems]);
 
   return (
@@ -121,37 +119,37 @@ export default function Inventory2(props) {
           <tr>
             <td>Primary:</td>
             <td id="primary_weapon" className={"equip-slot"} draggable={true}>
-              {inventory.primary_weapon || "none"}
+              {allItems.primary_weapon || "none"}
             </td>
           </tr>
           <tr>
             <td>Secondary:</td>
             <td id="secondary_weapon" className={"equip-slot"} draggable={true}>
-              {inventory.secondary_weapon || "none"}
+              {allItems.secondary_weapon || "none"}
             </td>
           </tr>
           <tr>
             <td>Armor:</td>
             <td id="armor" className={"equip-slot"} draggable={true}>
-              {inventory.armor || "none"}
+              {allItems.armor || "none"}
             </td>
           </tr>
           <tr>
             <td>Attunement 1:</td>
             <td id="attunement_1" className={"equip-slot"} draggable={true}>
-              {inventory.attunement_1 || "none"}
+              {allItems.attunement_1 || "none"}
             </td>
           </tr>
           <tr>
             <td>Attunement 2:</td>
             <td id="attunement_2" className={"equip-slot"} draggable={true}>
-              {inventory.attunement_2 || "none"}
+              {allItems.attunement_2 || "none"}
             </td>
           </tr>
           <tr>
             <td>Attunement 3:</td>
             <td id="attunement_3" className={"equip-slot"} draggable={true}>
-              {inventory.attunement_3 || "none"}
+              {allItems.attunement_3 || "none"}
             </td>
           </tr>
         </tbody>

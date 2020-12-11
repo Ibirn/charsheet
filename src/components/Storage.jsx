@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 export default function Storage(props) {
   // console.log("ST:", props);
@@ -6,7 +6,7 @@ export default function Storage(props) {
     <>
       {props.items.map((item, index) => {
         return (
-          <tr>
+          <tr key={`key${index}`}>
             <td
               id={`bag${index}`}
               className={"equip-slot baggedItem"}
