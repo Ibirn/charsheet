@@ -33,6 +33,7 @@ export default function Inventory2(props) {
 
   function handleDragStart(e) {
     dragSource = this;
+    console.log("DRAGST: ", this);
     e.dataTransfer.effectAllowed = "move";
     e.dataTransfer.setData("text/html", this.innerHTML);
   }
@@ -47,22 +48,45 @@ export default function Inventory2(props) {
 
   function handleDrop(e) {
     if (dragSource !== this && dragSource !== null) {
-      console.log("DS: ", dragSource.id, "\nTHIS: ", this);
       dragSource.innerHTML = this.innerHTML;
       this.innerHTML = e.dataTransfer.getData("text/html");
-      if (dragSource.id.includes("bag") || this.id.includes("bag")) {
+      let temp = [];
+
+      if (dragSource.id.includes("bag")) {
+        console.log("DRAGSRC: ", dragSource);
+        // console.log("BAGPROB: ", this);
+        for (const item of document.getElementsByClassName("baggedItem")) {
+          temp.push(item.innerHTML);
+        }
+        setAllItems((prev) => ({
+          ...prev,
+          [this.id]: this.innerHTML,
+          bag: temp.join(),
+        }));
+      } else if (this.id.includes("bag")) {
+        console.log("THIS: ", dragSource.id, dragSource.innerHTML);
+        console.log(dragSource.innerHTML);
+        for (const item of document.getElementsByClassName("baggedItem")) {
+          temp.push(item.innerHTML);
+        }
+        setAllItems((prev) => ({
+          ...prev,
+          [dragSource.id]: dragSource.innerHTML,
+          bag: temp.join(),
+        }));
+      } else {
+        setAllItems((prev) => ({
+          ...prev,
+          [dragSource.id]: document.getElementById(dragSource.id).innerHTML,
+          [this.id]: document.getElementById(this.id).innerHTML,
+        }));
       }
-      setAllItems((prev) => ({
-        ...prev,
-        [dragSource.id]: document.getElementById(dragSource.id).innerHTML,
-        [this.id]: document.getElementById(this.id).innerHTML,
-      }));
       e.preventDefault();
     }
   }
 
   useEffect(() => {
-    console.log(addToBag());
+    // console.log(addToBag());
     setAllItems((prev) => ({ ...prev, bag: addToBag() }));
     //grab all items
     let items = document.querySelectorAll(".equip-slot");

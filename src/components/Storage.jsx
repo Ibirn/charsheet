@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 
 export default function Storage(props) {
-  console.log("ST:", props);
+  // console.log("ST:", props);
   return (
     <>
       {props.items.map((item, index) => {
