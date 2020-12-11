@@ -102,9 +102,7 @@ export default function Inventory2(props) {
   useEffect(() => {
     sessionStorage.setItem("inventory", JSON.stringify(allItems));
     sessionStorage.setItem("invAutosave", JSON.stringify(allItems));
-    return () => {
-      // saveInv();
-    };
+    return () => {};
   }, [allItems]);
 
   return (
