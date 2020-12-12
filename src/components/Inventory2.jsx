@@ -47,11 +47,25 @@ export default function Inventory2(props) {
   }
 
   function handleDrop(e) {
-    if (dragSource !== this && dragSource !== null) {
+    if (this.id.includes("trash")) {
+      if (dragSource.id.includes("bag")) {
+        dragSource.parentElement.remove();
+      } else {
+        dragSource.innerHTML = "none";
+      }
+      // document.getElementById(dragSource.id).innerHTML = ;
+    } else if (dragSource !== this && dragSource !== null) {
+      console.log("here", dragSource, this);
       dragSource.innerHTML = this.innerHTML;
       this.innerHTML = e.dataTransfer.getData("text/html");
       let temp = [];
+      // console.log("trash DS: ", dragSource);
+      // console.log("Trash th: ", this.id);
       if (dragSource.id.includes("bag")) {
+        if (dragSource.innerHTML === "none") {
+          console.log("Moved onto nothing", dragSource.id);
+          dragSource.parentElement.remove();
+        }
         for (const item of document.getElementsByClassName("baggedItem")) {
           temp.push(item.innerHTML);
         }
@@ -76,6 +90,7 @@ export default function Inventory2(props) {
           [this.id]: document.getElementById(this.id).innerHTML,
         }));
       }
+
       e.preventDefault();
     }
   }
@@ -90,6 +105,7 @@ export default function Inventory2(props) {
       item.addEventListener("drop", handleDrop);
       item.addEventListener("dragover", handleDragOver);
     });
+
     return () =>
       //remove the goddamn listeners to prevent problems, you numpty - 5 hours and you should know better.
       items.forEach((item) => {
@@ -107,7 +123,7 @@ export default function Inventory2(props) {
 
   return (
     <>
-      <table draggable={false}>
+      <table id="equip-table" draggable={false}>
         <thead>
           <tr>
             <th colSpan="2">Equipment</th>
@@ -156,7 +172,7 @@ export default function Inventory2(props) {
       <table>
         <thead>
           <tr>
-            <th colSpan="2">Bag of Holding</th>
+            <th>Bag of Holding</th>
           </tr>
         </thead>
         <tbody>
@@ -173,6 +189,7 @@ export default function Inventory2(props) {
           Add item
         </button>
       </div>
+      <i id="trash" className="fas fa-trash equip-slot"></i>
     </>
   );
 }
