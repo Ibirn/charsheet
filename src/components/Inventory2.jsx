@@ -47,20 +47,38 @@ export default function Inventory2(props) {
   }
 
   function handleDrop(e) {
+    let temp = [];
+
+    //delete items from inventory
     if (this.id.includes("trash")) {
       if (dragSource.id.includes("bag")) {
         dragSource.parentElement.remove();
+        for (const item of document.getElementsByClassName("baggedItem")) {
+          temp.push(item.innerHTML);
+        }
+        setAllItems((prev) => ({ ...prev, bag: temp.join() }));
       } else {
-        dragSource.innerHTML = "none";
+        setAllItems((prev) => ({ ...prev, [dragSource.id]: null }));
       }
-      // document.getElementById(dragSource.id).innerHTML = ;
-    } else if (dragSource !== this && dragSource !== null) {
-      console.log("here", dragSource, this);
+    }
+    //unequip things without losing them
+    else if (this.id.includes("bag-of-holding")) {
+      if (!dragSource.id.includes("bag")) {
+        addEquip(dragSource.innerHTML);
+        for (const item of document.getElementsByClassName("baggedItem")) {
+          temp.push(item.innerHTML);
+        }
+        setAllItems((prev) => ({
+          ...prev,
+          [dragSource.id]: null,
+          bag: temp.join(),
+        }));
+      }
+    }
+    //change what you've got equipped
+    else if (dragSource !== this && dragSource !== null) {
       dragSource.innerHTML = this.innerHTML;
       this.innerHTML = e.dataTransfer.getData("text/html");
-      let temp = [];
-      // console.log("trash DS: ", dragSource);
-      // console.log("Trash th: ", this.id);
       if (dragSource.id.includes("bag")) {
         if (dragSource.innerHTML === "none") {
           console.log("Moved onto nothing", dragSource.id);
@@ -170,7 +188,7 @@ export default function Inventory2(props) {
       </table>
 
       <table>
-        <thead>
+        <thead id="bag-of-holding" className="equip-slot">
           <tr>
             <th>Bag of Holding</th>
           </tr>
