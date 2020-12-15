@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Charsheet from "./components/Charsheet";
 import Navbar from "./components/Navbar";
@@ -8,7 +8,7 @@ import Inventory2 from "./components/Inventory2";
 import Other from "./components/Tabs/Other";
 
 function App() {
-  // const [message, setMessage] = useState("");
+  const [SRD, setSRD] = useState({});
 
   useEffect(() => {
     axios.get(`/character`).then((response) => {
@@ -20,6 +20,8 @@ function App() {
     });
     return () => {};
   }, []);
+
+  useEffect(() => {}, []);
 
   return (
     <div className="App">
