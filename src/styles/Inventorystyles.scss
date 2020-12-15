@@ -1,6 +1,11 @@
 .inventory {
   display: flex;
   padding: 10px;
+  flex-direction: column;
+}
+
+#equip-table {
+  margin-bottom: 10px;
 }
 
 table,
@@ -9,11 +14,8 @@ td {
   border: 1px solid black;
 }
 
-.equip-table {
-  border: 1px solid #999;
-  .over {
-    border: 1px dotted #666;
-  }
+td {
+  width: 120px;
 }
 
 i {
